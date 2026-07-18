@@ -1,0 +1,415 @@
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  z-index: 1010;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.booking-modal-card {
+  width: 100%;
+  max-width: 600px;
+  background-color: hsl(var(--bg-surface));
+  border: 1px solid hsl(var(--border-color));
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  overflow: hidden;
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.booking-modal-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid hsl(var(--border-color));
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.booking-modal-title {
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.booking-close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: hsl(var(--text-primary));
+  opacity: 0.7;
+  transition: opacity var(--transition-fast);
+}
+
+.booking-close-btn:hover {
+  opacity: 1;
+}
+
+.booking-modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex-grow: 1;
+  text-align: left;
+}
+
+/* Step Indicator */
+.step-indicator-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem 0;
+}
+
+.step-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: hsl(var(--bg-card));
+  border: 1px solid hsl(var(--border-color));
+  color: hsl(var(--text-secondary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  transition: all var(--transition-fast);
+  z-index: 2;
+}
+
+.step-dot.active {
+  background-color: hsl(var(--accent-color));
+  border-color: hsl(var(--accent-color));
+  color: #fff;
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.step-line {
+  flex-grow: 1;
+  height: 2px;
+  background-color: hsl(var(--border-color));
+  margin: 0 -5px;
+  z-index: 1;
+  transition: background-color var(--transition-fast);
+}
+
+.step-line.active {
+  background-color: hsl(var(--accent-color));
+}
+
+/* Step 1 Grid */
+.input-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.label-icon {
+  margin-bottom: 2px;
+}
+
+.services-select-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+@media (max-width: 480px) {
+  .services-select-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.select-option-btn {
+  background-color: hsl(var(--bg-card));
+  border: 1px solid hsl(var(--border-color));
+  color: hsl(var(--text-primary));
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--transition-fast);
+}
+
+.select-option-btn:hover {
+  border-color: hsl(var(--text-muted));
+  background-color: hsl(var(--bg-card-hover));
+}
+
+.select-option-btn.selected {
+  background-color: hsl(var(--accent-color));
+  border-color: hsl(var(--accent-color));
+  color: #fff;
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+/* Step 2 List */
+.barbers-select-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.barber-option-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: hsl(var(--bg-card));
+  border: 1px solid hsl(var(--border-color));
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.barber-option-card:hover {
+  background-color: hsl(var(--bg-card-hover));
+  border-color: hsl(var(--text-muted));
+}
+
+.barber-option-card.selected {
+  border-color: hsl(var(--accent-color));
+  background-color: hsla(var(--accent-color) / 0.05);
+}
+
+.barber-avatar-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: hsl(var(--border-color));
+  color: hsl(var(--text-primary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.barber-option-card.selected .barber-avatar-circle {
+  background-color: hsl(var(--accent-color));
+  color: #fff;
+}
+
+.barber-option-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.barber-option-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.barber-option-status {
+  font-size: 0.75rem;
+  color: hsl(var(--whatsapp-color));
+}
+
+/* Step 3 Selectors */
+.booking-date-input {
+  width: 100%;
+  background-color: hsl(var(--bg-card));
+  border: 1px solid hsl(var(--border-color));
+  color: hsl(var(--text-primary));
+  padding: 0.75rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.booking-date-input:focus {
+  border-color: hsl(var(--accent-color));
+}
+
+.mt-4 {
+  margin-top: 1.5rem;
+}
+
+.time-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+@media (max-width: 576px) {
+  .time-slots-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 400px) {
+  .time-slots-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.time-slot-btn {
+  background-color: hsl(var(--bg-card));
+  border: 1px solid hsl(var(--border-color));
+  color: hsl(var(--text-primary));
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.time-slot-btn:hover {
+  background-color: hsl(var(--bg-card-hover));
+}
+
+.time-slot-btn.selected {
+  background-color: hsl(var(--accent-color));
+  border-color: hsl(var(--accent-color));
+  color: #fff;
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+/* Step 4 Form Input */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  color: hsl(var(--text-secondary));
+}
+
+.form-input {
+  width: 100%;
+  background-color: hsl(var(--bg-card));
+  border: 1px solid hsl(var(--border-color));
+  color: hsl(var(--text-primary));
+  padding: 0.75rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.form-input:focus {
+  border-color: hsl(var(--accent-color));
+}
+
+.form-input.text-area {
+  resize: vertical;
+}
+
+/* Modal Footer Actions */
+.booking-modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid hsl(var(--border-color));
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-nav-step {
+  font-size: 0.75rem;
+  padding: 0.5rem 1.25rem;
+}
+
+/* Success View */
+.booking-success-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.success-icon {
+  margin-bottom: 1.5rem;
+  animation: scaleUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes scaleUp {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.success-title {
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.success-text {
+  font-size: 0.9rem;
+  color: hsl(var(--text-secondary));
+  margin-bottom: 1.75rem;
+  max-width: 420px;
+}
+
+.booking-summary-card {
+  width: 100%;
+  background-color: hsl(var(--bg-card));
+  border: 1px solid hsl(var(--border-color));
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.summary-label {
+  color: hsl(var(--text-secondary));
+  font-weight: 500;
+}
+
+.summary-val {
+  color: hsl(var(--text-primary));
+  font-weight: 700;
+}
+
+.success-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.btn-success-wa {
+  width: 100%;
+  background-color: hsl(var(--whatsapp-color));
+  color: #fff;
+  border-color: hsl(var(--whatsapp-color));
+}
+
+.btn-success-wa:hover {
+  background-color: hsla(142, 70%, 38%, 1);
+  border-color: hsla(142, 70%, 38%, 1);
+  color: #fff;
+  box-shadow: 0 0 15px var(--whatsapp-glow);
+}

@@ -1,0 +1,160 @@
+.barbers-section {
+  background-color: hsl(var(--bg-color));
+  transition: background-color var(--transition-normal);
+}
+
+.barbers-subtitle {
+  font-size: 0.95rem;
+  color: hsl(var(--text-secondary));
+  margin-top: 0.5rem;
+}
+
+/* Barbers Grid */
+.barbers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+@media (max-width: 900px) {
+  .barbers-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .barbers-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.barber-card {
+  background-color: hsl(var(--bg-surface));
+  border: 1px solid hsl(var(--border-color));
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.barber-card:hover {
+  transform: translateY(-5px);
+  border-color: hsl(var(--accent-color));
+  box-shadow: var(--shadow-md);
+}
+
+.barber-avatar-box {
+  height: 200px;
+  background: linear-gradient(135deg, hsl(var(--bg-card)) 0%, hsl(var(--bg-color)) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-bottom: 1px solid hsl(var(--border-color));
+}
+
+.barber-avatar-large {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background-color: hsl(var(--accent-color));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 2.5rem;
+  box-shadow: 0 0 15px var(--accent-glow);
+  transition: transform var(--transition-fast);
+}
+
+.barber-card:hover .barber-avatar-large {
+  transform: scale(1.08);
+}
+
+.barber-rating {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background-color: hsla(var(--bg-color) / 0.85);
+  backdrop-filter: blur(4px);
+  border: 1px solid hsl(var(--border-color));
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.barber-star {
+  color: #f59e0b;
+}
+
+/* Barber Info */
+.barber-info {
+  padding: 1.5rem;
+  text-align: left;
+}
+
+.barber-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.barber-role {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: hsl(var(--accent-color));
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.barber-spec {
+  font-size: 0.875rem;
+  color: hsl(var(--text-secondary));
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.barber-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.btn-barber-book {
+  flex-grow: 1;
+  font-size: 0.75rem;
+  padding: 0.5rem 1rem;
+}
+
+.barber-social {
+  width: 32px;
+  height: 32px;
+  border: 1px solid hsl(var(--border-color));
+  color: hsl(var(--text-secondary));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.barber-social:hover {
+  background-color: hsl(var(--accent-color));
+  border-color: hsl(var(--accent-color));
+  color: #fff;
+  transform: translateY(-2px);
+}
