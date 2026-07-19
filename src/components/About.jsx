@@ -16,8 +16,8 @@ const About = () => {
       <div className="about-container container">
         <div className="about-grid">
           {/* Left Column: Content */}
-          <div className="about-content">
-            <span className="badge-red">About Urban Trim</span>
+          <div className="about-content reveal">
+            <span className="badge-red anim-comb-slide">About Urban Trim</span>
             <h2 className="about-title">
               Where Style <br />
               Meets <span className="text-red">Precision</span>
@@ -32,7 +32,7 @@ const About = () => {
             {/* Stats Row */}
             <div className="stats-row">
               {stats.map((stat, index) => (
-                <div key={index} className="stat-card">
+                <div key={index} className={`stat-card reveal reveal-delay-${index + 2}`}>
                   <span className="stat-value">{stat.value}</span>
                   <span className="stat-label">{stat.label}</span>
                 </div>
@@ -41,7 +41,7 @@ const About = () => {
           </div>
 
           {/* Right Column: Visual Grid Gallery */}
-          <div className="about-gallery">
+          <div className="about-gallery reveal reveal-delay-2">
             <div className="gallery-main-wrapper" onClick={() => setVideoOpen(true)}>
               <img 
                 src="/images/interior_2.jpg" 
@@ -67,8 +67,8 @@ const About = () => {
               </div>
               <div className="gallery-side-item bottom">
                 <img 
-                  src="/images/interior_1.jpg" 
-                  alt="Barber chair and setup" 
+                  src="/images/mock_1.png" 
+                  alt="Premium barber chairs with blue neon" 
                   className="gallery-side-img" 
                 />
               </div>

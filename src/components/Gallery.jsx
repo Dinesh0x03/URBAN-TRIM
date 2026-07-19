@@ -9,8 +9,8 @@ const Gallery = () => {
   const galleryImages = [
     {
       src: "/images/interior_1.jpg",
-      title: "Grooming Area & Pool Table",
-      desc: "Enjoy a game of pool while waiting for your turn in our spacious lounge."
+      title: "Premium Lounge & Styling Area",
+      desc: "Experience our state-of-the-art barbershop with blue neon lighting and sleek black barber chairs."
     },
     {
       src: "/images/interior_2.jpg",
@@ -18,9 +18,14 @@ const Gallery = () => {
       desc: "Welcome to Urban Trim! 'Every Barber has a story, our story begins here.'"
     },
     {
-      src: "/images/interior_3.png",
+      src: "/images/mock_1.png",
       title: "Master Barber Chairs",
-      desc: "Our premium setup with state-of-the-art chairs and custom overhead lighting."
+      desc: "Our premium red leather chairs with glowing mirrors and cobalt blue ambient lighting."
+    },
+    {
+      src: "/images/interior_3.png",
+      title: "Premium Barber Tools",
+      desc: "Only the finest scissors, razors, and clippers used for every client — precision is our craft."
     },
     {
       src: "/images/cut_1.png",

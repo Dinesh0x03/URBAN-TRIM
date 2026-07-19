@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaCut, FaShower, FaSpa, FaStar, FaSmile, FaSkull, FaEye, FaPlusCircle, FaTimes, FaCoffee } from 'react-icons/fa';
+import { FaCut, FaShower, FaSpa, FaStar, FaSmile, FaSkull, FaTimes, FaCoffee, FaUser } from 'react-icons/fa';
 import { GiRazor, GiBeard, GiTowel } from 'react-icons/gi';
 import './Services.css';
 
@@ -7,14 +7,14 @@ const Services = ({ openBookingWithService }) => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const popularServices = [
-    { id: 'skin-fade', name: "Skin Fade", price: "£20", description: "Precision side fade blended into skin", icon: <FaSkull size={20} /> },
-    { id: 'haircut', name: "Haircut", price: "£18", description: "Standard scissor & clipper cut", icon: <FaCut size={20} /> },
-    { id: 'beard-trim', name: "Beard Trim", price: "£12", description: "Shape-up, line-up & conditioning", icon: <GiBeard size={20} /> },
-    { id: 'hot-towel', name: "Hot Towel", price: "Included", description: "Pores opening face steam treatment", icon: <GiTowel size={20} /> },
-    { id: 'hair-wash', name: "Hair Wash", price: "Included", description: "Refreshing conditioning wash with cut", icon: <FaShower size={20} /> },
-    { id: 'kids-cut', name: "Kids Cut", price: "£15", description: "Under 12 years scissor/clipper cut", icon: <FaSmile size={20} /> },
-    { id: 'shape-up', name: "Shape Up", price: "£10", description: "Edge-up along natural hairline", icon: <GiRazor size={20} /> },
-    { id: 'full-package', name: "Full Package", price: "£35", description: "Haircut, wash, beard, hot towel & style", icon: <FaStar size={20} /> }
+    { id: 'skin-fade', name: "Skin Fade", price: "£20", icon: <FaUser size={22} /> },
+    { id: 'haircut', name: "Haircut", price: "£18", icon: <FaCut size={22} /> },
+    { id: 'beard-trim', name: "Beard Trim", price: "£12", icon: <GiBeard size={22} /> },
+    { id: 'hot-towel', name: "Hot Towel", price: "Included", icon: <GiTowel size={22} /> },
+    { id: 'hair-wash', name: "Hair Wash", price: "Included", icon: <FaShower size={22} /> },
+    { id: 'kids-cut', name: "Kids Cut", price: "£15", icon: <FaSmile size={22} /> },
+    { id: 'shape-up', name: "Shape Up", price: "£10", icon: <GiRazor size={22} /> },
+    { id: 'full-package', name: "Full Package", price: "£35", icon: <FaStar size={22} /> }
   ];
 
   const fullServices = {
@@ -70,38 +70,43 @@ const Services = ({ openBookingWithService }) => {
   return (
     <section id="services" className="services-section section-padding">
       <div className="services-container container">
-        <div className="section-header">
-          <span className="badge-red">Our Services</span>
-          <h2 className="services-title">Premium Grooming Tailored For <span className="text-red">You</span></h2>
-        </div>
-
-        {/* Popular Services Grid */}
-        <div className="services-grid animate-fade-in">
-          {popularServices.map((service) => (
-            <div key={service.id} className="service-card">
-              <div className="service-icon-header">
-                <div className="service-icon-box">
-                  {service.icon}
-                </div>
-                <span className="service-price">{service.price}</span>
-              </div>
-              <h3 className="service-name">{service.name}</h3>
-              <p className="service-desc">{service.description}</p>
-              <button 
-                className="service-book-btn"
-                onClick={() => handleBookService(service.name)}
-              >
-                Book Now
+        <div className="services-two-column-layout">
+          
+          {/* Left Column: Heading & Action Button */}
+          <div className="services-info-column reveal">
+            <span className="badge-red">Our Services</span>
+            <h2 className="services-title-new">
+              Premium Grooming<br />
+              Tailored For <span className="text-red">You</span>
+            </h2>
+            <div className="services-action-new">
+              <button className="btn btn-secondary btn-view-all" onClick={() => setModalOpen(true)}>
+                View All Services
               </button>
             </div>
-          ))}
-        </div>
+          </div>
 
-        {/* View All Services Trigger Button */}
-        <div className="services-action">
-          <button className="btn btn-secondary" onClick={() => setModalOpen(true)}>
-            View All Services
-          </button>
+          {/* Right Column: Grid of Horizontal Cards */}
+          <div className="services-grid-column">
+            {popularServices.map((service) => (
+              <div 
+                key={service.id} 
+                className="service-card-new"
+                onClick={() => handleBookService(service.name)}
+              >
+                <div className="service-card-left">
+                  <div className="service-icon-box-new">
+                    {service.icon}
+                  </div>
+                </div>
+                <div className="service-card-right">
+                  <h3 className="service-name-new">{service.name}</h3>
+                  <span className="service-price-new">{service.price}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
         </div>
       </div>
 

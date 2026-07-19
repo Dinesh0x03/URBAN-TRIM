@@ -16,6 +16,10 @@
   --accent-color: 0 72% 46%;         /* softer red */
   --accent-color-hover: 0 68% 40%;   /* muted red */
   --accent-glow: rgba(229, 28, 35, 0.28);
+
+  --accent-blue: 212 100% 50%;       /* neon blue matching pool felt & barber pole */
+  --accent-blue-hover: 212 100% 43%;
+  --accent-blue-glow: rgba(0, 122, 255, 0.35);
   
   --whatsapp-color: 142 70% 45%;     /* #25d366 */
   --whatsapp-glow: rgba(37, 211, 102, 0.3);
@@ -44,9 +48,13 @@
   --text-secondary: 240 5% 35%;      /* #52525b */
   --text-muted: 240 5% 60%;          /* #a1a1aa */
   
-  --accent-color: 0 68% 40%;         /* softer red in light mode */
-  --accent-color-hover: 0 64% 34%;
-  --accent-glow: rgba(229, 28, 35, 0.18);
+  --accent-color: 0 72% 43%;
+  --accent-color-hover: 0 72% 35%;
+  --accent-glow: rgba(229, 28, 35, 0.2);
+
+  --accent-blue: 212 100% 43%;
+  --accent-blue-hover: 212 100% 35%;
+  --accent-blue-glow: rgba(0, 122, 255, 0.2);
   
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
@@ -246,10 +254,152 @@ a {
   transform: rotate(45deg);
 }
 
+
 /* Utility overlay */
 .overlay-gradient {
   background: linear-gradient(to top, hsl(var(--bg-color)) 0%, rgba(9, 9, 11, 0.4) 60%, rgba(9, 9, 11, 0.8) 100%);
 }
 [data-theme="light"] .overlay-gradient {
   background: linear-gradient(to top, hsl(var(--bg-color)) 0%, rgba(255, 255, 255, 0.2) 60%, rgba(255, 255, 255, 0.6) 100%);
+}
+
+/* =====================================================
+   GLOBAL BARBERSHOP ANIMATIONS
+   ===================================================== */
+
+/* --- Scroll-reveal fade-up (applied via IntersectionObserver) --- */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+.reveal-delay-6 { transition-delay: 0.6s; }
+
+/* --- Floating Scissors (used on section dividers / hero) --- */
+@keyframes floatScissors {
+  0%   { transform: translateY(0px) rotate(-10deg); }
+  50%  { transform: translateY(-10px) rotate(-15deg); }
+  100% { transform: translateY(0px) rotate(-10deg); }
+}
+.anim-float-scissors {
+  animation: floatScissors 4s ease-in-out infinite;
+}
+
+/* --- Barber Pole Stripe Scroll --- */
+@keyframes barberStripe {
+  from { background-position: 0 0; }
+  to   { background-position: 0 60px; }
+}
+.anim-barber-stripe {
+  background: repeating-linear-gradient(
+    160deg,
+    hsl(var(--accent-color)) 0px,
+    hsl(var(--accent-color)) 10px,
+    #fff 10px,
+    #fff 20px,
+    hsl(var(--accent-blue)) 20px,
+    hsl(var(--accent-blue)) 30px
+  );
+  background-size: 100% 60px;
+  animation: barberStripe 1.2s linear infinite;
+}
+
+/* --- Snip entrance (cards, chips, badges) --- */
+@keyframes snipIn {
+  0%   { clip-path: inset(0 100% 0 0); opacity: 0; }
+  60%  { clip-path: inset(0 0% 0 0); opacity: 1; }
+  100% { clip-path: inset(0 0% 0 0); opacity: 1; }
+}
+.anim-snip-in {
+  animation: snipIn 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* --- Comb Slide (hero badge / section eyebrow labels) --- */
+@keyframes combSlide {
+  0%   { transform: translateX(-20px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+.anim-comb-slide {
+  animation: combSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* --- Razor Swipe (underline decorators) --- */
+@keyframes razorSwipe {
+  0%   { width: 0; }
+  100% { width: 100%; }
+}
+.anim-razor-underline {
+  display: inline-block;
+  position: relative;
+}
+.anim-razor-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background-color: hsl(var(--accent-color));
+  border-radius: 2px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.anim-razor-underline:hover::after {
+  width: 100%;
+}
+
+/* --- Shimmer loading placeholder --- */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.anim-shimmer {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--bg-surface)) 25%,
+    hsl(var(--bg-card)) 50%,
+    hsl(var(--bg-surface)) 75%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.8s infinite linear;
+}
+
+/* --- Pulse glow (red neon buttons / highlighted items) --- */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 8px var(--accent-glow); }
+  50%       { box-shadow: 0 0 22px var(--accent-glow); }
+}
+.anim-glow-pulse {
+  animation: glowPulse 2.5s ease-in-out infinite;
+}
+
+/* --- Blue neon glow pulse --- */
+@keyframes glowPulseBlue {
+  0%, 100% { box-shadow: 0 0 8px var(--accent-blue-glow); }
+  50%       { box-shadow: 0 0 22px var(--accent-blue-glow); }
+}
+.anim-glow-pulse-blue {
+  animation: glowPulseBlue 2.5s ease-in-out infinite;
+}
+
+/* --- Ticker / Marquee utility (brand strip) --- */
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.anim-ticker {
+  animation: ticker 20s linear infinite;
+  white-space: nowrap;
+}
+.anim-ticker:hover {
+  animation-play-state: paused;
 }

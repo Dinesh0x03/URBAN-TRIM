@@ -1,51 +1,51 @@
 import React from 'react';
-import { FaCut, FaGem, FaSpa, FaShower, FaStar, FaWhatsapp, FaSmileBeam, FaCalendarAlt } from 'react-icons/fa';
+import { FaCut, FaShower, FaStar, FaWhatsapp } from 'react-icons/fa';
+import { GiBeard, GiTowel } from 'react-icons/gi';
 import './Hero.css';
 
 const Hero = ({ openBooking }) => {
   const uspItems = [
     {
-      icon: <FaCut size={22} />,
+      icon: <FaCut size={28} />,
       title: "Expert Barbers",
       description: "Skilled in modern & classic styles"
     },
     {
-      icon: <FaGem size={22} />,
+      icon: <FaStar size={28} />,
       title: "Premium Service",
       description: "Relax in our massage chairs"
     },
     {
-      icon: <FaSpa size={22} />,
+      icon: <GiTowel size={28} />,
       title: "Hot Towel",
       description: "Hot towel & skin care included"
     },
     {
-      icon: <FaShower size={22} />,
+      icon: <FaShower size={28} />,
       title: "Hair Wash",
       description: "Refreshing wash for every cut"
     },
     {
-      icon: <FaSmileBeam size={22} />,
+      icon: <GiBeard size={28} />,
       title: "Beard Grooming",
       description: "Shape, trim & perfect your beard"
     },
     {
-      icon: <FaStar size={22} />,
+      icon: <FaStar size={28} />,
       title: "Top Rated",
       description: "Consistently 5-star experience"
     }
   ];
 
   const handleWhatsappChat = () => {
-    // Open Whatsapp Link
-    window.open("https://wa.me/447375983000", "_blank"); // Standard placeholder or real if we know it
+    window.open("https://wa.me/447375983000", "_blank");
   };
 
   return (
     <section id="home" className="hero-section">
       {/* Background Image & Overlay */}
       <div className="hero-bg-image">
-        <div className="hero-overlay overlay-gradient"></div>
+        <div className="hero-overlay"></div>
       </div>
 
       <div className="hero-container container">
@@ -61,14 +61,18 @@ const Hero = ({ openBooking }) => {
             Urban Trim is more than a haircut — it's a lifestyle. Precision cuts, premium service and a modern experience.
           </p>
 
+          {/* Glowing Red Neon Quote Block */}
+          <div className="hero-quote-box">
+            <span className="hero-quote-text">"Every Barber has a story, our story begins here"</span>
+          </div>
+
           <div className="hero-actions">
             <button className="btn btn-primary btn-hero-book" onClick={openBooking}>
-              <FaCalendarAlt size={14} className="mr-2" />
-              Book Appointment
+              BOOK APPOINTMENT
             </button>
-            <button className="btn btn-whatsapp" onClick={handleWhatsappChat}>
+            <button className="btn btn-whatsapp-hero" onClick={handleWhatsappChat}>
               <FaWhatsapp size={18} />
-              Whatsapp Us
+              WHATSAPP US
             </button>
           </div>
         </div>

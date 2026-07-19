@@ -6,7 +6,6 @@ import Services from './components/Services';
 import Barbers from './components/Barbers';
 import Gallery from './components/Gallery';
 import Reviews from './components/Reviews';
-import MapLocation from './components/MapLocation';
 import ContactFooter from './components/ContactFooter';
 import BookingModal from './components/BookingModal';
 import { FaCalendarCheck, FaWhatsapp } from 'react-icons/fa';
@@ -29,6 +28,26 @@ function App() {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
   }, [theme]);
+
+  // Scroll-reveal IntersectionObserver — triggers .reveal → .visible
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target); // animate once
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    const targets = document.querySelectorAll('.reveal');
+    targets.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }); // runs after every render so newly mounted elements are caught
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
@@ -73,7 +92,6 @@ function App() {
         <Barbers openBookingWithBarber={openBookingWithBarber} />
         <Gallery />
         <Reviews />
-        <MapLocation />
         <ContactFooter openBooking={openBooking} />
       </main>
 

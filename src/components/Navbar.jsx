@@ -107,16 +107,14 @@ const Navbar = ({ theme, toggleTheme, openBooking }) => {
             <button className="btn btn-secondary btn-nav-book" onClick={openBooking}>
               Book Appointment
             </button>
+            <button 
+              className="navbar-hamburger" 
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label="Toggle navigation menu"
+            >
+              {isOpen ? <FaTimes size={22} /> : <FaBars size={22} />}
+            </button>
           </div>
-
-          {/* Hamburger Menu Icon (Right) */}
-          <button 
-            className="navbar-hamburger" 
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label="Toggle navigation menu"
-          >
-            {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-          </button>
         </div>
       </nav>
 

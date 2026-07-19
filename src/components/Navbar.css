@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 80px;
+  height: 90px;
   z-index: 100;
   display: flex;
   align-items: center;
@@ -13,7 +13,7 @@
 }
 
 .navbar.scrolled {
-  height: 70px;
+  height: 80px;
   background-color: hsla(var(--bg-color) / 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -39,12 +39,15 @@
 }
 
 .logo-img {
-  height: 82px;
+  height: 72px; /* 30% larger (approx 55px * 1.3) */
   width: auto;
-  max-width: 220px;
   object-fit: contain;
   display: block;
-  transition: transform var(--transition-fast);
+  transition: all var(--transition-normal);
+}
+
+.navbar.scrolled .logo-img {
+  height: 62px; /* proportional scale down on scroll */
 }
 
 .navbar-logo:hover .logo-img {
@@ -120,24 +123,27 @@
 }
 
 .btn-nav-book {
-  border-color: hsl(var(--accent-color));
+  border-color: hsl(var(--text-primary));
   color: hsl(var(--text-primary));
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   padding: 0.5rem 1.25rem;
+  letter-spacing: 0.08em;
 }
 
 .btn-nav-book:hover {
   background-color: hsl(var(--accent-color));
+  border-color: hsl(var(--accent-color));
   color: #fff;
 }
 
 .navbar-hamburger {
-  display: none;
+  display: flex;
   background: none;
   border: none;
   cursor: pointer;
   color: hsl(var(--text-primary));
   z-index: 102;
+  margin-left: 0.75rem;
 }
 
 .mobile-theme-toggle {
@@ -157,13 +163,13 @@
 
 /* Responsive Navbar */
 @media (max-width: 992px) {
-  .navbar-menu,
-  .navbar-actions {
+  .navbar-menu {
     display: none;
   }
   
-  .navbar-hamburger {
-    display: flex;
+  .desktop-theme-toggle,
+  .btn-nav-book {
+    display: none;
   }
   
   .mobile-theme-toggle {
