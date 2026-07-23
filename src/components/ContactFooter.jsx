@@ -131,7 +131,6 @@ const ContactFooter = ({ openBooking }) => {
               {hours.map((h, idx) => (
                 <li key={idx} className={h.day === today ? 'today' : ''}>
                   <span className="day">
-                    {h.day === today && <span className="today-dot"></span>}
                     {h.day}
                   </span>
                   <span className="time">{h.time}</span>

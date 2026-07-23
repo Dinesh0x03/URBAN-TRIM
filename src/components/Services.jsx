@@ -7,14 +7,62 @@ const Services = ({ openBookingWithService }) => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const popularServices = [
-    { id: 'skin-fade', name: "Skin Fade", price: "£20", icon: <FaUser size={22} /> },
-    { id: 'haircut', name: "Haircut", price: "£18", icon: <FaCut size={22} /> },
-    { id: 'beard-trim', name: "Beard Trim", price: "£12", icon: <GiBeard size={22} /> },
-    { id: 'hot-towel', name: "Hot Towel", price: "Included", icon: <GiTowel size={22} /> },
-    { id: 'hair-wash', name: "Hair Wash", price: "Included", icon: <FaShower size={22} /> },
-    { id: 'kids-cut', name: "Kids Cut", price: "£15", icon: <FaSmile size={22} /> },
-    { id: 'shape-up', name: "Shape Up", price: "£10", icon: <GiRazor size={22} /> },
-    { id: 'full-package', name: "Full Package", price: "£35", icon: <FaStar size={22} /> }
+    {
+      id: 'skin-fade',
+      name: "Skin Fade",
+      desc: "High, mid or low skin fade blended to perfection.",
+      price: "£20",
+      icon: <FaUser size={22} />
+    },
+    {
+      id: 'haircut',
+      name: "Haircut",
+      desc: "Classic cut tailored to your style and face shape.",
+      price: "£18",
+      icon: <FaCut size={22} />
+    },
+    {
+      id: 'beard-trim',
+      name: "Beard Trim",
+      desc: "Expert beard shaping, lining and definition.",
+      price: "£12",
+      icon: <GiBeard size={22} />
+    },
+    {
+      id: 'hot-towel',
+      name: "Hot Towel",
+      desc: "Relaxing hot towel treatment included with every cut.",
+      price: "Included",
+      icon: <GiTowel size={22} />
+    },
+    {
+      id: 'hair-wash',
+      name: "Hair Wash",
+      desc: "Refreshing shampoo and condition for a clean finish.",
+      price: "Included",
+      icon: <FaShower size={22} />
+    },
+    {
+      id: 'kids-cut',
+      name: "Kids Cut",
+      desc: "Stylish, fun cuts for the young gentlemen (0–12).",
+      price: "£15",
+      icon: <FaSmile size={22} />
+    },
+    {
+      id: 'shape-up',
+      name: "Shape Up",
+      desc: "Crisp edge line up around hairline, temples and neck.",
+      price: "£10",
+      icon: <GiRazor size={22} />
+    },
+    {
+      id: 'full-package',
+      name: "Full Package",
+      desc: "Complete groom package — cut, beard, hot towel & more.",
+      price: "£35",
+      icon: <FaStar size={22} />
+    }
   ];
 
   const fullServices = {
@@ -101,6 +149,7 @@ const Services = ({ openBookingWithService }) => {
                 </div>
                 <div className="service-card-right">
                   <h3 className="service-name-new">{service.name}</h3>
+                  <p className="service-desc-new">{service.desc}</p>
                   <span className="service-price-new">{service.price}</span>
                 </div>
               </div>

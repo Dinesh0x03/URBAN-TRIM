@@ -12,22 +12,15 @@ import { FaCalendarCheck, FaWhatsapp } from 'react-icons/fa';
 import './App.css';
 
 function App() {
-  // Theme state: dark mode is default for premium look, light mode optional
-  const [theme, setTheme] = useState(() => {
-    const savedTheme = localStorage.getItem('theme');
-    return savedTheme || 'dark';
-  });
+  // Always dark mode — light theme removed
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }, []);
 
   // Booking Modal States
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [initialService, setInitialService] = useState('');
   const [initialBarber, setInitialBarber] = useState('');
-
-  useEffect(() => {
-    // Apply theme attribute to document node
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-  }, [theme]);
 
   // Scroll-reveal IntersectionObserver — triggers .reveal → .visible
   useEffect(() => {
@@ -36,22 +29,16 @@ function App() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
-            observer.unobserve(entry.target); // animate once
+            observer.unobserve(entry.target);
           }
         });
       },
       { threshold: 0.12 }
     );
-
     const targets = document.querySelectorAll('.reveal');
     targets.forEach((el) => observer.observe(el));
-
     return () => observer.disconnect();
-  }); // runs after every render so newly mounted elements are caught
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
-  };
+  });
 
   const openBooking = () => {
     setInitialService('');
@@ -77,12 +64,8 @@ function App() {
 
   return (
     <div className="app-wrapper">
-      {/* Top Navbar */}
-      <Navbar 
-        theme={theme} 
-        toggleTheme={toggleTheme} 
-        openBooking={openBooking} 
-      />
+      {/* Top Navbar — no theme prop needed anymore */}
+      <Navbar openBooking={openBooking} />
 
       {/* Main Page Layout Sections */}
       <main className="main-content">
@@ -95,15 +78,15 @@ function App() {
         <ContactFooter openBooking={openBooking} />
       </main>
 
-      {/* Mobile Sticky Booking Action Bar (Shown only on mobile views) */}
+      {/* Mobile Sticky Booking Action Bar */}
       <div className="mobile-sticky-footer">
         <div className="mobile-footer-container">
           <button className="btn btn-mobile-book" onClick={openBooking}>
             <FaCalendarCheck size={16} />
             <span>Book Appointment</span>
           </button>
-          <button 
-            className="btn-mobile-wa" 
+          <button
+            className="btn-mobile-wa"
             onClick={() => window.open("https://wa.me/447375983000", "_blank")}
             aria-label="Chat on WhatsApp"
           >
@@ -112,10 +95,10 @@ function App() {
         </div>
       </div>
 
-      {/* Shared Interation Booking Pop-up Modal */}
-      <BookingModal 
-        isOpen={isBookingOpen} 
-        onClose={closeBooking} 
+      {/* Booking Modal */}
+      <BookingModal
+        isOpen={isBookingOpen}
+        onClose={closeBooking}
         initialService={initialService}
         initialBarber={initialBarber}
       />

@@ -29,25 +29,14 @@
   width: 100%;
   height: 100%;
   z-index: -1;
-  /* Left to right gradient fade for maximum text contrast and readability */
+  /* Left to right gradient fade for maximum text contrast */
   background: linear-gradient(
-    to right, 
-    hsl(var(--bg-color)) 0%, 
-    hsl(var(--bg-color) / 0.98) 25%, 
-    hsl(var(--bg-color) / 0.85) 45%, 
-    hsl(var(--bg-color) / 0.1) 75%, 
-    hsl(var(--bg-color) / 0.4) 100%
-  );
-}
-
-[data-theme="light"] .hero-overlay {
-  background: linear-gradient(
-    to right, 
-    hsl(var(--bg-color)) 0%, 
-    hsl(var(--bg-color) / 0.98) 25%, 
-    hsl(var(--bg-color) / 0.9) 45%, 
-    hsl(var(--bg-color) / 0.1) 75%, 
-    hsl(var(--bg-color) / 0.3) 100%
+    to right,
+    rgba(5, 8, 25, 0.98) 0%,
+    rgba(5, 8, 25, 0.95) 25%,
+    rgba(5, 8, 25, 0.80) 45%,
+    rgba(5, 8, 25, 0.10) 75%,
+    rgba(5, 8, 25, 0.35) 100%
   );
 }
 
@@ -67,20 +56,38 @@
   text-align: left;
 }
 
-.hero-title {
-  font-family: var(--font-heading);
-  font-size: 5rem;
-  font-weight: 800;
-  line-height: 0.95;
+/* Hero Eyebrow */
+.hero-eyebrow {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 700;
   text-transform: uppercase;
-  margin-top: 0.5rem;
-  margin-bottom: 1.5rem;
-  letter-spacing: -0.03em;
-  color: hsl(var(--text-primary));
+  letter-spacing: 0.18em;
+  color: hsl(var(--accent-color));
+  margin-bottom: 1.1rem;
 }
 
+.hero-title {
+  font-family: 'Anton', var(--font-heading), sans-serif;
+  font-size: 4.8rem;
+  font-weight: 400;    /* Anton is always bold by design — weight 400 is its regular */
+  line-height: 0.95;
+  text-transform: uppercase;
+  margin-top: 0;
+  margin-bottom: 1.4rem;
+  letter-spacing: 0.01em; /* Anton looks best with slight positive tracking */
+  color: #fff;
+}
+
+/* Red accent word */
 .text-red {
   color: hsl(var(--accent-color));
+}
+
+/* Blue accent word — LIFESTYLE */
+.text-blue {
+  color: hsl(var(--accent-blue));
 }
 
 .hero-description {
@@ -91,7 +98,7 @@
   max-width: 480px;
 }
 
-/* Glowing Neon Shop Quote Styling */
+/* Neon Quote */
 .hero-quote-box {
   margin-bottom: 2.25rem;
   text-align: left;
@@ -100,7 +107,7 @@
 .hero-quote-text {
   font-family: 'Playfair Display', Georgia, serif;
   font-style: italic;
-  font-size: 1.35rem;
+  font-size: 1.15rem;
   font-weight: 600;
   color: #ff3b30;
   letter-spacing: 0.02em;
@@ -109,64 +116,153 @@
                0 0 20px rgba(255, 59, 48, 0.4);
 }
 
-[data-theme="light"] .hero-quote-text {
-  color: hsl(var(--accent-color));
-  text-shadow: none;
-}
-
+/* ── CTA Buttons ── */
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+  align-items: center;
 }
 
-/* Red primary button */
+/* Red pill button — Book Your Appointment */
 .btn-hero-book {
-  background-color: hsl(var(--accent-color)) !important;
-  color: #fff !important;
-  border-radius: var(--radius-sm);
-  font-size: 0.8rem;
-  padding: 0.8rem 2rem;
-  letter-spacing: 0.08em;
-  font-weight: 700;
-  border: 1px solid hsl(var(--accent-color));
-}
-
-.btn-hero-book:hover {
-  background-color: hsl(var(--accent-color-hover)) !important;
-  transform: translateY(-2px);
-  box-shadow: 0 0 20px var(--accent-glow);
-}
-
-/* Translucent outline button matching mockup */
-.btn-whatsapp-hero {
-  background-color: transparent;
-  color: hsl(var(--text-primary));
-  border: 1px solid hsl(var(--text-primary));
-  border-radius: var(--radius-sm);
-  font-size: 0.8rem;
-  padding: 0.8rem 2rem;
-  letter-spacing: 0.08em;
-  font-weight: 700;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
+  background-color: hsl(var(--accent-color));
+  color: #fff;
+  border: none;
+  border-radius: 999px;           /* full pill shape */
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0.85rem 2rem;
+  letter-spacing: 0.04em;
   cursor: pointer;
   transition: all var(--transition-fast);
+  white-space: nowrap;
 }
 
-.btn-whatsapp-hero:hover {
-  border-color: hsl(var(--accent-blue));
-  color: hsl(var(--text-primary));
-  background-color: hsla(var(--accent-blue) / 0.15);
+.btn-hero-book:hover {
+  background-color: hsl(var(--accent-color-hover));
   transform: translateY(-2px);
-  box-shadow: 0 0 15px var(--accent-blue-glow);
+  box-shadow: 0 6px 22px var(--accent-glow);
 }
 
-[data-theme="light"] .btn-whatsapp-hero:hover {
-  background-color: hsla(var(--accent-blue) / 0.1);
+/* Dark outlined pill button — View Our Services */
+.btn-hero-services {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  color: #fff;
+  border: 2px solid rgba(255,255,255,0.65);
+  border-radius: 999px;           /* full pill shape */
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0.85rem 2rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  backdrop-filter: blur(4px);
+}
+
+.btn-hero-services:hover {
+  border-color: hsl(var(--accent-blue));
   color: hsl(var(--accent-blue));
+  background-color: hsla(var(--accent-blue) / 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px var(--accent-blue-glow);
+}
+
+/* ── Barber Pole Scroll Indicator ── */
+.hero-scroll-wrapper {
+  margin-top: 1.75rem;
+  display: flex;
+  align-items: center;
+}
+
+.barber-pole-scroll-link {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.barber-pole-scroll-link:hover {
+  transform: translateY(3px);
+}
+
+.barber-pole-pill {
+  width: 22px;
+  height: 56px;
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 14px rgba(229, 28, 35, 0.45), 0 0 14px rgba(0, 122, 255, 0.45);
+}
+
+.barber-pole-stripes {
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: repeating-linear-gradient(
+    135deg,
+    #e51c23 0px,
+    #e51c23 10px,
+    #ffffff 10px,
+    #ffffff 20px,
+    #0055b8 20px,
+    #0055b8 30px,
+    #ffffff 30px,
+    #ffffff 40px
+  );
+  animation: rotateBarberPole 2.5s linear infinite;
+}
+
+@keyframes rotateBarberPole {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(40px);
+  }
+}
+
+.scroll-label-text {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 0.45rem;
+  text-transform: uppercase;
+}
+
+.scroll-down-arrow {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: hsl(var(--accent-color));
+  line-height: 1;
+  margin-top: 0.15rem;
+  animation: bounceArrow 1.5s ease-in-out infinite;
+}
+
+@keyframes bounceArrow {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(4px);
+    opacity: 1;
+  }
 }
 
 /* USP / Quick Info Grid - Minimal styling matching mockup */
@@ -269,7 +365,7 @@
   }
   
   .hero-title {
-    font-size: 3rem;
+    font-size: 2.9rem;
   }
   
   .hero-description {
@@ -285,17 +381,19 @@
   
   .hero-actions {
     flex-direction: column;
+    align-items: flex-start;
     width: 100%;
   }
   
-  .hero-actions .btn,
-  .hero-actions .btn-whatsapp-hero {
+  .hero-actions .btn-hero-book,
+  .hero-actions .btn-hero-services {
     width: 100%;
+    justify-content: center;
   }
 }
 
 @media (max-width: 480px) {
   .hero-title {
-    font-size: 2.5rem;
+    font-size: 2.4rem;
   }
 }

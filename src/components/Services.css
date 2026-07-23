@@ -56,11 +56,12 @@
   background-color: hsl(var(--bg-surface));
   border: 1px solid hsl(var(--border-color));
   border-radius: var(--radius-md);
-  padding: 1.25rem 1rem;
+  padding: 1.1rem 1.1rem;
   cursor: pointer;
   transition: all var(--transition-fast);
   box-shadow: var(--shadow-sm);
-  min-height: 76px;
+  /* No fixed min-height — let content determine card height */
+  align-items: flex-start;
 }
 
 [data-theme="light"] .service-card-new {
@@ -111,14 +112,23 @@
 }
 
 .service-name-new {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 700;
   text-transform: uppercase;
   color: hsl(var(--text-primary));
   letter-spacing: 0.02em;
   line-height: 1.2;
-  margin-bottom: 0.15rem;
+  margin-bottom: 0.3rem;
 }
+
+.service-desc-new {
+  font-size: 0.72rem;
+  color: hsl(var(--text-muted));
+  line-height: 1.45;
+  margin-bottom: 0.4rem;
+  /* Show all text — no clamping */
+}
+
 
 .service-price-new {
   font-family: var(--font-heading);

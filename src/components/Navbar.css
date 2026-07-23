@@ -14,7 +14,7 @@
 
 .navbar.scrolled {
   height: 80px;
-  background-color: hsla(var(--bg-color) / 0.85);
+  background-color: hsla(var(--bg-color) / 0.92);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid hsl(var(--border-color));
@@ -29,7 +29,7 @@
   position: relative;
 }
 
-/* Logo */
+/* ── Logo ── */
 .navbar-logo {
   display: flex;
   align-items: center;
@@ -39,7 +39,7 @@
 }
 
 .logo-img {
-  height: 72px; /* 30% larger (approx 55px * 1.3) */
+  height: 72px;
   width: auto;
   object-fit: contain;
   display: block;
@@ -47,14 +47,14 @@
 }
 
 .navbar.scrolled .logo-img {
-  height: 62px; /* proportional scale down on scroll */
+  height: 62px;
 }
 
 .navbar-logo:hover .logo-img {
   transform: scale(1.03);
 }
 
-/* Menu */
+/* ── Desktop Menu ── */
 .navbar-menu {
   display: flex;
   list-style: none;
@@ -94,90 +94,71 @@
   width: 100%;
 }
 
-/* Actions */
+/* ── Actions (right side) ── */
 .navbar-actions {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
-.desktop-theme-toggle {
-  background: none;
-  border: none;
+/* Book button — always shown on desktop */
+.btn-nav-book {
+  background-color: hsl(var(--accent-color));
+  border: 1px solid hsl(var(--accent-color));
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 0.55rem 1.25rem;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: hsl(var(--text-primary));
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid hsl(var(--border-color));
-  background-color: hsl(var(--bg-surface));
   transition: all var(--transition-fast);
 }
 
-.desktop-theme-toggle:hover {
-  background-color: hsl(var(--bg-card-hover));
-  border-color: hsl(var(--text-muted));
-}
-
-.btn-nav-book {
-  border-color: hsl(var(--text-primary));
-  color: hsl(var(--text-primary));
-  font-size: 0.7rem;
-  padding: 0.5rem 1.25rem;
-  letter-spacing: 0.08em;
-}
-
 .btn-nav-book:hover {
-  background-color: hsl(var(--accent-color));
-  border-color: hsl(var(--accent-color));
-  color: #fff;
+  background-color: hsl(var(--accent-color-hover));
+  border-color: hsl(var(--accent-color-hover));
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px var(--accent-glow);
 }
 
+/* ── Hamburger — ONLY visible on mobile (< 768px) ── */
 .navbar-hamburger {
-  display: flex;
+  display: none; /* hidden by default (desktop & tablet) */
   background: none;
   border: none;
   cursor: pointer;
   color: hsl(var(--text-primary));
   z-index: 102;
-  margin-left: 0.75rem;
+  padding: 4px;
 }
 
-.mobile-theme-toggle {
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  color: hsl(var(--text-primary));
-  z-index: 102;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid hsl(var(--border-color));
-}
-
-/* Responsive Navbar */
+/* ── Responsive ── */
+/* Tablet: hide nav links but keep book button, no hamburger */
 @media (max-width: 992px) {
   .navbar-menu {
     display: none;
   }
-  
-  .desktop-theme-toggle,
+}
+
+/* Mobile only: show hamburger, hide book button */
+@media (max-width: 767px) {
+  .navbar-menu {
+    display: none;
+  }
+
   .btn-nav-book {
     display: none;
   }
-  
-  .mobile-theme-toggle {
+
+  .navbar-hamburger {
     display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
-/* Mobile Drawer */
+/* ── Mobile Drawer ── */
 .mobile-drawer {
   position: fixed;
   top: 0;
@@ -190,7 +171,7 @@
   display: flex;
   flex-direction: column;
   padding: 2rem 1.5rem;
-  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.3);
+  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
   transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -228,6 +209,7 @@
   display: block;
   padding: 0.5rem 0;
   border-bottom: 1px solid hsl(var(--border-color));
+  transition: color var(--transition-fast), border-color var(--transition-fast);
 }
 
 .drawer-link.active,

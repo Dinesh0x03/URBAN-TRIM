@@ -1,113 +1,160 @@
 import React, { useState } from 'react';
-import { FaTimes, FaArrowLeft, FaArrowRight, FaSearchPlus } from 'react-icons/fa';
+import { FaTimes, FaArrowLeft, FaArrowRight, FaCamera } from 'react-icons/fa';
 import './Gallery.css';
 
 const Gallery = () => {
+  const [activeFilter, setActiveFilter] = useState('all');
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const galleryImages = [
+  const filters = ['all', 'haircuts', 'beards', 'kids', 'interior'];
+
+  const allImages = [
     {
-      src: "/images/interior_1.jpg",
-      title: "Premium Lounge & Styling Area",
-      desc: "Experience our state-of-the-art barbershop with blue neon lighting and sleek black barber chairs."
+      src: '/images/barber_action.png',
+      title: 'Precision Fade',
+      category: 'haircuts',
+      size: 'normal',
     },
     {
-      src: "/images/interior_2.jpg",
-      title: "Reception & Neon Wall",
-      desc: "Welcome to Urban Trim! 'Every Barber has a story, our story begins here.'"
+      src: '/images/cut_2.png',
+      title: 'Skin Fade & Beard',
+      category: 'beards',
+      size: 'tall',
     },
     {
-      src: "/images/mock_1.png",
-      title: "Master Barber Chairs",
-      desc: "Our premium red leather chairs with glowing mirrors and cobalt blue ambient lighting."
+      src: '/images/shop_interior_real.png',
+      title: 'The Lounge',
+      category: 'interior',
+      size: 'normal',
     },
     {
-      src: "/images/interior_3.png",
-      title: "Premium Barber Tools",
-      desc: "Only the finest scissors, razors, and clippers used for every client — precision is our craft."
+      src: '/images/interior_1.jpg',
+      title: 'Styling Area',
+      category: 'interior',
+      size: 'normal',
     },
     {
-      src: "/images/cut_1.png",
-      title: "Fresh Burst Fade Cut",
-      desc: "A clean temple shape-up and textured crop with a modern skin fade."
+      src: '/images/interior_2.jpg',
+      title: 'Reception & Neon',
+      category: 'interior',
+      size: 'normal',
     },
     {
-      src: "/images/cut_2.png",
-      title: "Sharp Skin Fade & Beard Trim",
-      desc: "Classic razor-sharp edge line up, clean mid-skin fade, and groomed beard."
-    }
+      src: '/images/mock_1.png',
+      title: 'Premium Chairs',
+      category: 'interior',
+      size: 'normal',
+    },
+    {
+      src: '/images/cut_1.png',
+      title: 'Fresh Burst Fade',
+      category: 'haircuts',
+      size: 'normal',
+    },
+    {
+      src: '/images/client_fade.png',
+      title: 'Sharp Side Part',
+      category: 'haircuts',
+      size: 'normal',
+    },
   ];
+
+  const filtered = activeFilter === 'all'
+    ? allImages
+    : allImages.filter(img => img.category === activeFilter);
 
   const openLightbox = (index) => {
     setCurrentIndex(index);
     setLightboxOpen(true);
   };
 
-  const closeLightbox = () => {
-    setLightboxOpen(false);
-  };
+  const closeLightbox = () => setLightboxOpen(false);
 
   const nextImage = (e) => {
     e.stopPropagation();
-    setCurrentIndex((prev) => (prev === galleryImages.length - 1 ? 0 : prev + 1));
+    setCurrentIndex(prev => (prev === filtered.length - 1 ? 0 : prev + 1));
   };
 
   const prevImage = (e) => {
     e.stopPropagation();
-    setCurrentIndex((prev) => (prev === 0 ? galleryImages.length - 1 : prev - 1));
+    setCurrentIndex(prev => (prev === 0 ? filtered.length - 1 : prev - 1));
   };
 
   return (
     <section id="gallery" className="gallery-section section-padding">
       <div className="gallery-container container">
-        <div className="section-header">
-          <span className="badge-red">Our Lounge & Cuts</span>
-          <h2 className="gallery-title">Inside The <span className="text-red">Shop</span></h2>
-          <p className="gallery-subtitle">Take a look at our premium lounge space and fresh client haircuts</p>
+
+        {/* Header */}
+        <div className="gallery-header">
+          <h2 className="gallery-main-title">A Look Inside Urban Trim</h2>
+          <p className="gallery-subtitle">Real cuts. Real craftsmanship. Real Urban Trim.</p>
         </div>
 
-        {/* Gallery Grid */}
-        <div className="gallery-grid">
-          {galleryImages.map((img, index) => (
-            <div key={index} className="gallery-card" onClick={() => openLightbox(index)}>
-              <div className="gallery-img-wrapper">
-                <img src={img.src} alt={img.title} className="gallery-img" />
-                <div className="gallery-hover-overlay">
-                  <FaSearchPlus className="zoom-icon" size={24} />
-                  <h4 className="hover-title">{img.title}</h4>
-                </div>
-              </div>
+        {/* Filter Tabs */}
+        <div className="gallery-filters">
+          {filters.map(f => (
+            <button
+              key={f}
+              className={`filter-tab ${activeFilter === f ? 'active' : ''}`}
+              onClick={() => { setActiveFilter(f); setCurrentIndex(0); }}
+            >
+              {f.charAt(0).toUpperCase() + f.slice(1)}
+            </button>
+          ))}
+        </div>
+
+        {/* Masonry Grid */}
+        <div className="gallery-masonry">
+          {filtered.map((img, index) => (
+            <div
+              key={index}
+              className={`gallery-card ${img.size === 'tall' ? 'card-tall' : ''}`}
+              onClick={() => openLightbox(index)}
+            >
+              <img src={img.src} alt={img.title} className="gallery-img" />
+              {/* Category label at bottom-left (visible on hover) */}
+              <div className="gallery-card-label">{img.title}</div>
+              {/* Subtle dark overlay on hover */}
+              <div className="gallery-card-overlay" />
             </div>
           ))}
         </div>
+
+        {/* View Full Gallery Button */}
+        <div className="gallery-cta">
+          <button className="btn-view-gallery" onClick={() => openLightbox(0)}>
+            <FaCamera size={15} style={{ marginRight: '0.5rem' }} />
+            View Full Gallery
+          </button>
+        </div>
+
       </div>
 
-      {/* Lightbox Modal */}
+      {/* Lightbox */}
       {lightboxOpen && (
         <div className="lightbox-overlay" onClick={closeLightbox}>
-          <button className="lightbox-close" onClick={closeLightbox} aria-label="Close lightbox">
-            <FaTimes size={24} />
+          <button className="lightbox-close" onClick={closeLightbox} aria-label="Close">
+            <FaTimes size={20} />
           </button>
-          
-          <button className="lightbox-arrow left" onClick={prevImage} aria-label="Previous image">
-            <FaArrowLeft size={20} />
+
+          <button className="lightbox-arrow left" onClick={prevImage} aria-label="Previous">
+            <FaArrowLeft size={18} />
           </button>
-          
-          <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
-            <img 
-              src={galleryImages[currentIndex].src} 
-              alt={galleryImages[currentIndex].title} 
-              className="lightbox-img" 
+
+          <div className="lightbox-content" onClick={e => e.stopPropagation()}>
+            <img
+              src={filtered[currentIndex].src}
+              alt={filtered[currentIndex].title}
+              className="lightbox-img"
             />
             <div className="lightbox-info">
-              <h4 className="lightbox-title">{galleryImages[currentIndex].title}</h4>
-              <p className="lightbox-desc">{galleryImages[currentIndex].desc}</p>
+              <h4 className="lightbox-title">{filtered[currentIndex].title}</h4>
             </div>
           </div>
 
-          <button className="lightbox-arrow right" onClick={nextImage} aria-label="Next image">
-            <FaArrowRight size={20} />
+          <button className="lightbox-arrow right" onClick={nextImage} aria-label="Next">
+            <FaArrowRight size={18} />
           </button>
         </div>
       )}

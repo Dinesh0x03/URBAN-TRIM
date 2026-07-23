@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaCut, FaShower, FaStar, FaWhatsapp } from 'react-icons/fa';
+import { FaCalendarCheck, FaCut, FaShower, FaStar } from 'react-icons/fa';
 import { GiBeard, GiTowel } from 'react-icons/gi';
 import './Hero.css';
 
@@ -37,10 +37,6 @@ const Hero = ({ openBooking }) => {
     }
   ];
 
-  const handleWhatsappChat = () => {
-    window.open("https://wa.me/447375983000", "_blank");
-  };
-
   return (
     <section id="home" className="hero-section">
       {/* Background Image & Overlay */}
@@ -50,15 +46,17 @@ const Hero = ({ openBooking }) => {
 
       <div className="hero-container container">
         <div className="hero-content animate-fade-in">
-          <span className="badge-red">Premium Barbershop Experience</span>
-          
+          <span className="hero-eyebrow">PRECISION CUTS. CLEAN FADES.</span>
+
           <h1 className="hero-title">
-            LOOK SHARP.<br />
-            FEEL <span className="text-red">CONFIDENT.</span>
+            MORE THAN<br />
+            A <span className="text-red">HAIRCUT,</span><br />
+            IT'S A <span className="text-blue">LIFESTYLE.</span>
           </h1>
-          
+
           <p className="hero-description">
-            Urban Trim is more than a haircut — it's a lifestyle. Precision cuts, premium service and a modern experience.
+            Confidence that speaks for itself. Sheffield's<br />
+            premium barbershop for the modern gentleman.
           </p>
 
           {/* Glowing Red Neon Quote Block */}
@@ -67,13 +65,36 @@ const Hero = ({ openBooking }) => {
           </div>
 
           <div className="hero-actions">
-            <button className="btn btn-primary btn-hero-book" onClick={openBooking}>
-              BOOK APPOINTMENT
+            <button className="btn btn-hero-book" onClick={openBooking}>
+              <FaCalendarCheck size={15} style={{ marginRight: '0.5rem' }} />
+              Book Your Appointment
             </button>
-            <button className="btn btn-whatsapp-hero" onClick={handleWhatsappChat}>
-              <FaWhatsapp size={18} />
-              WHATSAPP US
+            <button className="btn btn-hero-services" onClick={() => {
+              const el = document.getElementById('services');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}>
+              View Our Services &nbsp;→
             </button>
+          </div>
+
+          {/* Barber Pole Scroll Indicator */}
+          <div className="hero-scroll-wrapper">
+            <a
+              href="#about"
+              className="barber-pole-scroll-link"
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.getElementById('about');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              aria-label="Scroll down to About section"
+            >
+              <div className="barber-pole-pill">
+                <div className="barber-pole-stripes" />
+              </div>
+              <span className="scroll-label-text">SCROLL</span>
+              <span className="scroll-down-arrow">∨</span>
+            </a>
           </div>
         </div>
 

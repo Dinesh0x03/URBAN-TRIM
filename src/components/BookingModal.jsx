@@ -1,357 +1,506 @@
 import React, { useState, useEffect } from 'react';
-import { FaTimes, FaCalendarAlt, FaUser, FaCut, FaCheckCircle, FaWhatsapp, FaArrowRight, FaArrowLeft } from 'react-icons/fa';
+import {
+  FaTimes,
+  FaCalendarAlt,
+  FaClock,
+  FaChevronLeft,
+  FaChevronRight,
+  FaCheckCircle,
+  FaWhatsapp,
+  FaCut,
+  FaUser,
+  FaArrowRight,
+  FaArrowLeft,
+  FaCheck
+} from 'react-icons/fa';
+import { GiBeard, GiRazor } from 'react-icons/gi';
 import './BookingModal.css';
 
 const BookingModal = ({ isOpen, onClose, initialService, initialBarber }) => {
+  const today = new Date();
   const [step, setStep] = useState(1);
-  const [selectedService, setSelectedService] = useState('');
-  const [selectedBarber, setSelectedBarber] = useState('Any Barber');
-  const [bookingDate, setBookingDate] = useState('');
-  const [bookingTime, setBookingTime] = useState('');
+  const [currentMonthDate, setCurrentMonthDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(today);
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState("10:00 AM");
+  
+  const [selectedServices, setSelectedServices] = useState([initialService || "Skin Fade (£20)"]);
+  const [selectedBarber, setSelectedBarber] = useState(initialBarber || "Any Barber");
+  
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [notes, setNotes] = useState('');
+  const [note, setNote] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
 
-  // Set initial selections when modal opens
   useEffect(() => {
     if (isOpen) {
       setIsSuccess(false);
-      
-      if (initialService) {
-        setSelectedService(initialService);
-        setStep(2); // Jump to barber selection
-      } else {
-        setSelectedService('');
-        setStep(1);
-      }
-      
-      if (initialBarber) {
-        setSelectedBarber(initialBarber);
-        if (initialService) {
-          setStep(3); // Jump to date/time selection since service and barber are both selected
-        } else {
-          setStep(1); // Keep on service selection if service isn't selected yet
-        }
-      } else {
-        setSelectedBarber('Any Barber');
-      }
+      setStep(1);
+      if (initialService) setSelectedServices([initialService]);
+      if (initialBarber) setSelectedBarber(initialBarber);
     }
-  }, [initialService, initialBarber, isOpen]);
+  }, [isOpen, initialService, initialBarber]);
 
   if (!isOpen) return null;
 
-  const servicesList = [
-    "Skin Fade (£20)",
-    "Haircut (£18)",
-    "Beard Trim (£12)",
-    "Full Package (£35)",
-    "Buzz Cut (£12)",
-    "Children's Cuts (£15)",
-    "Shape Up (£10)",
-    "Hot Towel Shave (£20)",
-    "Face Steam & Mask (£20)",
-    "Razor Cut (£20)",
-    "Head Shave (£15)"
-  ];
+  const categorizedServices = {
+    "Haircuts & Styling": [
+      { name: "Skin Fade", price: "£20", desc: "High, mid or low skin fade" },
+      { name: "Haircut", price: "£18", desc: "Classic tailored haircut" },
+      { name: "Fade Cut", price: "£18", desc: "Blended gradient cut" },
+      { name: "Buzz Cut", price: "£12", desc: "Uniform clipper cut" },
+      { name: "Razor Cut", price: "£20", desc: "Precision razor styling" }
+    ],
+    "Beard & Shaving": [
+      { name: "Beard Trim", price: "£12", desc: "Shape, trim & oil" },
+      { name: "Hot Towel Shave", price: "£20", desc: "Relaxing steam & razor" },
+      { name: "Straight Razor Shave", price: "£20", desc: "Traditional clean shave" },
+      { name: "Beard Dyeing", price: "£15", desc: "Grey blending & color" }
+    ],
+    "Face & Packages": [
+      { name: "Face Mask", price: "£10", desc: "Deep cleansing facial" },
+      { name: "Face Steam", price: "£10", desc: "Warm pore relaxation" },
+      { name: "Groom Package", price: "£35", desc: "Full cut, beard & hot towel" }
+    ]
+  };
 
   const barbersList = [
-    "Any Barber",
-    "Sam - Fade Specialist",
-    "Alex - Beard Expert",
-    "Lee - Scissor Master"
+    { name: "Any Barber", role: "First Available" },
+    { name: "Sam", role: "Fade Specialist" },
+    { name: "Alex", role: "Beard Expert" },
+    { name: "Lee", role: "Scissor Master" }
   ];
 
   const timeSlots = [
-    "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
-    "12:00 PM", "12:30 PM", "01:00 PM", "01:30 PM", "02:00 PM", "02:30 PM",
-    "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM", "05:00 PM", "05:30 PM",
-    "06:00 PM", "06:30 PM"
+    "10:00 AM", "10:30 AM", "11:00 AM",
+    "11:30 AM", "12:00 PM", "12:30 PM",
+    "1:00 PM",  "1:30 PM",  "2:00 PM",
+    "2:30 PM",  "3:00 PM",  "3:30 PM",
+    "4:00 PM",  "4:30 PM",  "5:00 PM",
+    "5:30 PM",  "6:00 PM",  "6:30 PM"
   ];
 
-  const nextStep = () => {
-    if (step === 1 && !selectedService) {
-      alert("Please select a service");
-      return;
+  const toggleServiceSelection = (serviceFullName) => {
+    if (selectedServices.includes(serviceFullName)) {
+      if (selectedServices.length > 1) {
+        setSelectedServices(selectedServices.filter(s => s !== serviceFullName));
+      }
+    } else {
+      setSelectedServices([...selectedServices, serviceFullName]);
     }
-    if (step === 2 && !selectedBarber) {
-      alert("Please select a barber");
-      return;
-    }
-    if (step === 3 && (!bookingDate || !bookingTime)) {
-      alert("Please pick a date and time");
-      return;
-    }
-    setStep(step + 1);
   };
 
-  const prevStep = () => {
-    setStep(step - 1);
+  // Calendar Helpers
+  const year = currentMonthDate.getFullYear();
+  const month = currentMonthDate.getMonth();
+  const monthName = currentMonthDate.toLocaleString('default', { month: 'long' });
+
+  const firstDayOfWeek = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const prevMonthDays = new Date(year, month, 0).getDate();
+
+  const handlePrevMonth = () => {
+    setCurrentMonthDate(new Date(year, month - 1, 1));
   };
 
-  const handleBookingSubmit = (e) => {
+  const handleNextMonth = () => {
+    setCurrentMonthDate(new Date(year, month + 1, 1));
+  };
+
+  const isSameDay = (d1, d2) => {
+    return d1.getFullYear() === d2.getFullYear() &&
+           d1.getMonth() === d2.getMonth() &&
+           d1.getDate() === d2.getDate();
+  };
+
+  const isPastDay = (dayNum) => {
+    const checkDate = new Date(year, month, dayNum);
+    const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    return checkDate < startOfToday;
+  };
+
+  const handleSelectDay = (dayNum) => {
+    const newSelected = new Date(year, month, dayNum);
+    setSelectedDate(newSelected);
+  };
+
+  const goToStep = (targetStep) => {
+    if (targetStep === 2 && selectedServices.length === 0) {
+      alert("Please select at least one service.");
+      return;
+    }
+    if (targetStep === 3 && (!selectedDate || !selectedTimeSlot)) {
+      alert("Please pick a date and time slot.");
+      return;
+    }
+    setStep(targetStep);
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!name || !phone) {
-      alert("Please fill in your name and phone number");
+      alert("Please enter your name and phone number.");
       return;
     }
     setIsSuccess(true);
   };
 
   const sendWhatsAppBooking = () => {
-    const message = `Hello Urban Trim! I would like to book a grooming appointment:
-• Service: ${selectedService}
+    const formattedDate = selectedDate.toLocaleDateString('en-GB', {
+      weekday: 'short',
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
+
+    const message = `Hello Urban Trim! I would like to book an appointment:
+• Services: ${selectedServices.join(', ')}
 • Barber: ${selectedBarber}
-• Date: ${bookingDate}
-• Time: ${bookingTime}
+• Date: ${formattedDate}
+• Time Slot: ${selectedTimeSlot}
 • Client: ${name}
 • Phone: ${phone}
-${notes ? `• Special Notes: ${notes}` : ''}`;
+${note ? `• Special Requests: ${note}` : ''}`;
 
-    const encodedText = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/447375983000?text=${encodedText}`;
-    window.open(whatsappUrl, '_blank');
-    handleResetClose();
+    window.open(`https://wa.me/447375983000?text=${encodeURIComponent(message)}`, '_blank');
+    handleClose();
   };
 
-  const handleResetClose = () => {
+  const handleClose = () => {
+    setIsSuccess(false);
     setStep(1);
-    setSelectedService('');
-    setSelectedBarber('Any Barber');
-    setBookingDate('');
-    setBookingTime('');
     setName('');
     setPhone('');
-    setNotes('');
-    setIsSuccess(false);
+    setNote('');
     onClose();
   };
 
-  // Get current date string for input minimum (no booking in the past)
-  const getTodayDateString = () => {
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    let mm = today.getMonth() + 1;
-    let dd = today.getDate();
-    if (mm < 10) mm = '0' + mm;
-    if (dd < 10) dd = '0' + dd;
-    return `${yyyy}-${mm}-${dd}`;
-  };
-
   return (
-    <div className="modal-backdrop" onClick={handleResetClose}>
-      <div className="booking-modal-card" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-backdrop" onClick={handleClose}>
+      <div className="book-appointment-dialog dark-theme-dialog" onClick={(e) => e.stopPropagation()}>
+        
         {/* Header */}
-        <div className="booking-modal-header">
-          <h3 className="booking-modal-title">
-            {isSuccess ? "Appointment Scheduled" : `Book Appointment - Step ${step} of 4`}
-          </h3>
-          <button className="booking-close-btn" onClick={handleResetClose}>
+        <div className="dialog-header">
+          <div className="dialog-title-group">
+            <h2 className="dialog-title">Book Appointment</h2>
+            <p className="dialog-subtitle-step">
+              {step === 1 && "Step 1 of 3: Select Services & Barber"}
+              {step === 2 && "Step 2 of 3: Select Date & Time"}
+              {step === 3 && "Step 3 of 3: Enter Your Details"}
+            </p>
+          </div>
+          <button className="dialog-close-btn" onClick={handleClose} aria-label="Close">
             <FaTimes size={18} />
           </button>
         </div>
 
-        {/* Step Indicator Bar */}
+        {/* Step Indicator Tabs */}
         {!isSuccess && (
-          <div className="step-indicator-container">
-            <div className={`step-dot ${step >= 1 ? 'active' : ''}`}>1</div>
-            <div className={`step-line ${step >= 2 ? 'active' : ''}`}></div>
-            <div className={`step-dot ${step >= 2 ? 'active' : ''}`}>2</div>
-            <div className={`step-line ${step >= 3 ? 'active' : ''}`}></div>
-            <div className={`step-dot ${step >= 3 ? 'active' : ''}`}>3</div>
-            <div className={`step-line ${step >= 4 ? 'active' : ''}`}></div>
-            <div className={`step-dot ${step >= 4 ? 'active' : ''}`}>4</div>
+          <div className="dialog-step-tabs">
+            <button
+              className={`step-tab ${step >= 1 ? 'active' : ''}`}
+              onClick={() => goToStep(1)}
+            >
+              <span className="step-num">1</span> Services
+            </button>
+            <div className={`step-connector ${step >= 2 ? 'active' : ''}`} />
+            <button
+              className={`step-tab ${step >= 2 ? 'active' : ''}`}
+              onClick={() => goToStep(2)}
+            >
+              <span className="step-num">2</span> Date & Time
+            </button>
+            <div className={`step-connector ${step >= 3 ? 'active' : ''}`} />
+            <button
+              className={`step-tab ${step >= 3 ? 'active' : ''}`}
+              onClick={() => goToStep(3)}
+            >
+              <span className="step-num">3</span> Details
+            </button>
           </div>
         )}
 
-        {/* Form Body */}
-        <div className="booking-modal-body">
+        {/* Sliding Viewport */}
+        <div className="dialog-body">
           {isSuccess ? (
             /* Success Screen */
-            <div className="booking-success-view">
-              <FaCheckCircle className="success-icon text-green" size={60} />
-              <h4 className="success-title">Ready for Your Fresh Trim!</h4>
-              <p className="success-text">
-                Your request has been captured locally. To secure and instantly lock your slot with the barber, send us a quick WhatsApp confirmation message!
+            <div className="booking-success-container">
+              <FaCheckCircle className="success-icon text-red" size={56} />
+              <h3>Appointment Reserved!</h3>
+              <p className="success-subtitle">
+                Your appointment for <strong>{selectedServices.join(', ')}</strong> on{' '}
+                <strong>{selectedDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} at {selectedTimeSlot}</strong> has been saved.
               </p>
               
-              <div className="booking-summary-card">
-                <div className="summary-item">
-                  <span className="summary-label">Service:</span>
-                  <span className="summary-val">{selectedService}</span>
-                </div>
-                <div className="summary-item">
-                  <span className="summary-label">Barber:</span>
-                  <span className="summary-val">{selectedBarber}</span>
-                </div>
-                <div className="summary-item">
-                  <span className="summary-label">Date & Time:</span>
-                  <span className="summary-val">{bookingDate} @ {bookingTime}</span>
-                </div>
-                <div className="summary-item">
-                  <span className="summary-label">Client Name:</span>
-                  <span className="summary-val">{name}</span>
-                </div>
+              <div className="summary-box">
+                <div className="summary-row"><span>Client:</span> <strong>{name}</strong></div>
+                <div className="summary-row"><span>Phone:</span> <strong>{phone}</strong></div>
+                <div className="summary-row"><span>Barber:</span> <strong>{selectedBarber}</strong></div>
+                {note && <div className="summary-row"><span>Notes:</span> <strong>{note}</strong></div>}
               </div>
 
-              <div className="success-actions">
-                <button className="btn btn-primary btn-success-wa" onClick={sendWhatsAppBooking}>
-                  <FaWhatsapp size={18} />
-                  Send WhatsApp Booking
+              <div className="success-btn-group">
+                <button className="btn-send-whatsapp" onClick={sendWhatsAppBooking}>
+                  <FaWhatsapp size={18} /> Send WhatsApp Confirmation
                 </button>
-                <button className="btn btn-secondary w-full" onClick={handleResetClose}>
+                <button className="btn-dialog-outline" onClick={handleClose}>
                   Done & Close
                 </button>
               </div>
             </div>
           ) : (
-            <form onSubmit={handleBookingSubmit}>
-              {/* STEP 1: Select Service */}
-              {step === 1 && (
-                <div className="step-content animate-fade-in">
-                  <label className="input-label">
-                    <FaCut className="label-icon text-red" /> Select Grooming Service
-                  </label>
-                  <div className="services-select-grid">
-                    {servicesList.map((item) => (
-                      <button
-                        key={item}
-                        type="button"
-                        className={`select-option-btn ${selectedService === item ? 'selected' : ''}`}
-                        onClick={() => setSelectedService(item)}
-                      >
-                        {item}
-                      </button>
-                    ))}
+            <div className="sliding-viewport">
+              <div
+                className="sliding-track"
+                style={{ transform: `translateX(-${(step - 1) * 33.3333}%)` }}
+              >
+                
+                {/* ── SUBPAGE 1: SERVICES & BARBER ── */}
+                <div className="slide-page">
+                  
+                  {/* Select Barber */}
+                  <div className="section-block">
+                    <label className="section-label">
+                      <FaUser className="label-icon text-red" /> Select Barber
+                    </label>
+                    <div className="barbers-pill-grid">
+                      {barbersList.map(b => (
+                        <button
+                          key={b.name}
+                          type="button"
+                          className={`barber-pill-card ${selectedBarber === b.name ? 'selected' : ''}`}
+                          onClick={() => setSelectedBarber(b.name)}
+                        >
+                          <span className="barber-pill-name">{b.name}</span>
+                          <span className="barber-pill-role">{b.role}</span>
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
 
-              {/* STEP 2: Choose Barber */}
-              {step === 2 && (
-                <div className="step-content animate-fade-in">
-                  <label className="input-label">
-                    <FaUser className="label-icon text-red" /> Choose Your Barber
-                  </label>
-                  <div className="barbers-select-list">
-                    {barbersList.map((barber) => (
-                      <div
-                        key={barber}
-                        className={`barber-option-card ${selectedBarber === barber ? 'selected' : ''}`}
-                        onClick={() => setSelectedBarber(barber)}
-                      >
-                        <div className="barber-avatar-circle">
-                          {barber.charAt(0)}
-                        </div>
-                        <div className="barber-option-info">
-                          <span className="barber-option-name">{barber}</span>
-                          <span className="barber-option-status">Available</span>
+                  {/* Category-wise Services */}
+                  <div className="section-block mt-4">
+                    <label className="section-label">
+                      <FaCut className="label-icon text-red" /> Choose Services
+                    </label>
+
+                    {Object.entries(categorizedServices).map(([category, items]) => (
+                      <div key={category} className="category-group">
+                        <h4 className="category-group-title">{category}</h4>
+                        <div className="category-services-grid">
+                          {items.map(service => {
+                            const fullName = `${service.name} (${service.price})`;
+                            const isSelected = selectedServices.includes(fullName);
+                            return (
+                              <div
+                                key={service.name}
+                                className={`service-selection-card ${isSelected ? 'selected' : ''}`}
+                                onClick={() => toggleServiceSelection(fullName)}
+                              >
+                                <div className="service-card-check">
+                                  {isSelected && <FaCheck size={10} />}
+                                </div>
+                                <div className="service-card-details">
+                                  <span className="service-card-name">{service.name}</span>
+                                  <span className="service-card-desc">{service.desc}</span>
+                                </div>
+                                <span className="service-card-price">{service.price}</span>
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
                     ))}
                   </div>
+
+                  {/* Step 1 Footer */}
+                  <div className="slide-footer">
+                    <span className="selected-count-badge">
+                      {selectedServices.length} service(s) selected
+                    </span>
+                    <button
+                      type="button"
+                      className="btn-dialog-primary"
+                      onClick={() => goToStep(2)}
+                    >
+                      Next: Select Date & Time <FaArrowRight size={12} style={{ marginLeft: '0.4rem' }} />
+                    </button>
+                  </div>
+
                 </div>
-              )}
 
-              {/* STEP 3: Choose Date & Time */}
-              {step === 3 && (
-                <div className="step-content animate-fade-in">
-                  <label className="input-label">
-                    <FaCalendarAlt className="label-icon text-red" /> Select Date
-                  </label>
-                  <input
-                    type="date"
-                    className="booking-date-input"
-                    value={bookingDate}
-                    min={getTodayDateString()}
-                    onChange={(e) => setBookingDate(e.target.value)}
-                    required
-                  />
+                {/* ── SUBPAGE 2: DATE & TIME (2-COLUMN MATCHING SCREENSHOT) ── */}
+                <div className="slide-page">
+                  <div className="booking-grid-layout">
+                    
+                    {/* LEFT COLUMN: Calendar */}
+                    <div className="calendar-panel">
+                      <div className="panel-section-title">
+                        <FaCalendarAlt className="panel-icon text-blue" /> Select Date
+                      </div>
 
-                  <label className="input-label mt-4">
-                    <FaCalendarAlt className="label-icon text-red" /> Select Time Slot
-                  </label>
-                  <div className="time-slots-grid">
-                    {timeSlots.map((time) => (
+                      <div className="calendar-box">
+                        <div className="calendar-header-nav">
+                          <button type="button" className="cal-nav-btn" onClick={handlePrevMonth}>
+                            <FaChevronLeft size={12} />
+                          </button>
+                          <span className="cal-month-title">{monthName} {year}</span>
+                          <button type="button" className="cal-nav-btn" onClick={handleNextMonth}>
+                            <FaChevronRight size={12} />
+                          </button>
+                        </div>
+
+                        <div className="calendar-weekdays-grid">
+                          <span>Su</span><span>Mo</span><span>Tu</span>
+                          <span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+                        </div>
+
+                        <div className="calendar-days-grid">
+                          {[...Array(firstDayOfWeek)].map((_, i) => (
+                            <span key={`prev-${i}`} className="cal-day-cell pad-day">
+                              {prevMonthDays - firstDayOfWeek + i + 1}
+                            </span>
+                          ))}
+
+                          {[...Array(daysInMonth)].map((_, i) => {
+                            const dayNum = i + 1;
+                            const thisDate = new Date(year, month, dayNum);
+                            const isSelected = isSameDay(thisDate, selectedDate);
+                            const disabled = isPastDay(dayNum);
+
+                            return (
+                              <button
+                                key={`day-${dayNum}`}
+                                type="button"
+                                disabled={disabled}
+                                className={`cal-day-cell ${isSelected ? 'selected' : ''} ${disabled ? 'disabled' : ''}`}
+                                onClick={() => handleSelectDay(dayNum)}
+                              >
+                                {dayNum}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* RIGHT COLUMN: Time Slots */}
+                    <div className="timeslots-panel">
+                      <div className="panel-section-title">
+                        <FaClock className="panel-icon text-blue" /> Select Time Slot
+                      </div>
+
+                      <div className="timeslots-grid">
+                        {timeSlots.map((slot) => (
+                          <button
+                            key={slot}
+                            type="button"
+                            className={`timeslot-pill ${selectedTimeSlot === slot ? 'selected' : ''}`}
+                            onClick={() => setSelectedTimeSlot(slot)}
+                          >
+                            {slot}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                  </div>
+
+                  {/* Step 2 Footer */}
+                  <div className="slide-footer">
+                    <button
+                      type="button"
+                      className="btn-dialog-outline"
+                      onClick={() => goToStep(1)}
+                    >
+                      <FaArrowLeft size={12} style={{ marginRight: '0.4rem' }} /> Back
+                    </button>
+                    <button
+                      type="button"
+                      className="btn-dialog-primary"
+                      onClick={() => goToStep(3)}
+                    >
+                      Next: Enter Details <FaArrowRight size={12} style={{ marginLeft: '0.4rem' }} />
+                    </button>
+                  </div>
+
+                </div>
+
+                {/* ── SUBPAGE 3: CLIENT DETAILS ── */}
+                <div className="slide-page">
+                  <form onSubmit={handleSubmit}>
+                    
+                    {/* Summary Card */}
+                    <div className="step3-summary-strip">
+                      <div className="summary-chip">
+                        <span className="chip-lbl">Service:</span> {selectedServices.join(', ')}
+                      </div>
+                      <div className="summary-chip">
+                        <span className="chip-lbl">Barber:</span> {selectedBarber}
+                      </div>
+                      <div className="summary-chip">
+                        <span className="chip-lbl">When:</span> {selectedDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} @ {selectedTimeSlot}
+                      </div>
+                    </div>
+
+                    <div className="client-inputs-stack">
+                      <div className="input-group">
+                        <label className="input-field-label">Full Name *</label>
+                        <input
+                          type="text"
+                          className="dialog-input"
+                          placeholder="e.g. John Doe"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          required
+                        />
+                      </div>
+
+                      <div className="input-group">
+                        <label className="input-field-label">Phone Number *</label>
+                        <input
+                          type="tel"
+                          className="dialog-input"
+                          placeholder="e.g. +44 7123 456789"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          required
+                        />
+                      </div>
+
+                      <div className="input-group">
+                        <label className="input-field-label">Note / Special Requests (Optional)</label>
+                        <textarea
+                          className="dialog-textarea"
+                          placeholder="Any preferences about your trim, fade height, beard oil..."
+                          rows={3}
+                          value={note}
+                          onChange={(e) => setNote(e.target.value)}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Step 3 Footer */}
+                    <div className="slide-footer">
                       <button
-                        key={time}
                         type="button"
-                        className={`time-slot-btn ${bookingTime === time ? 'selected' : ''}`}
-                        onClick={() => setBookingTime(time)}
+                        className="btn-dialog-outline"
+                        onClick={() => goToStep(2)}
                       >
-                        {time}
+                        <FaArrowLeft size={12} style={{ marginRight: '0.4rem' }} /> Back
                       </button>
-                    ))}
-                  </div>
+                      <button type="submit" className="btn-dialog-primary">
+                        Confirm & Book Appointment
+                      </button>
+                    </div>
+
+                  </form>
                 </div>
-              )}
 
-              {/* STEP 4: Contact Details */}
-              {step === 4 && (
-                <div className="step-content animate-fade-in">
-                  <div className="form-group">
-                    <label className="form-label" htmlFor="client-name">Your Full Name</label>
-                    <input
-                      type="text"
-                      id="client-name"
-                      className="form-input"
-                      placeholder="e.g. John Doe"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label" htmlFor="client-phone">Phone Number</label>
-                    <input
-                      type="tel"
-                      id="client-phone"
-                      className="form-input"
-                      placeholder="e.g. +44 7123 456789"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label" htmlFor="booking-notes">Special Requirements / Notes (Optional)</label>
-                    <textarea
-                      id="booking-notes"
-                      className="form-input text-area"
-                      placeholder="Any details about your trim, fade preferences, skin sensitivities, etc."
-                      value={notes}
-                      onChange={(e) => setNotes(e.target.value)}
-                      rows={3}
-                    />
-                  </div>
-                </div>
-              )}
-
-              {/* Action Buttons */}
-              <div className="booking-modal-footer">
-                {step > 1 ? (
-                  <button type="button" className="btn btn-secondary btn-nav-step" onClick={prevStep}>
-                    <FaArrowLeft /> Back
-                  </button>
-                ) : (
-                  <div />
-                )}
-
-                {step < 4 ? (
-                  <button type="button" className="btn btn-primary btn-nav-step" onClick={nextStep}>
-                    Next <FaArrowRight />
-                  </button>
-                ) : (
-                  <button type="submit" className="btn btn-primary btn-nav-step">
-                    Book & Request
-                  </button>
-                )}
               </div>
-            </form>
+            </div>
           )}
         </div>
+
       </div>
     </div>
   );
