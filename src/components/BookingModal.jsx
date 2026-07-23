@@ -11,10 +11,11 @@ import {
   FaUser,
   FaArrowRight,
   FaArrowLeft,
-  FaCheck
+  FaCheck,
+  FaEnvelope
 } from 'react-icons/fa';
-import { GiBeard, GiRazor } from 'react-icons/gi';
 import './BookingModal.css';
+import { submitAppointmentBooking } from '../services/bookingService';
 
 const BookingModal = ({ isOpen, onClose, initialService, initialBarber }) => {
   const today = new Date();
@@ -28,12 +29,15 @@ const BookingModal = ({ isOpen, onClose, initialService, initialBarber }) => {
   
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [note, setNote] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
       setIsSuccess(false);
+      setIsSubmitting(false);
       setStep(1);
       if (initialService) setSelectedServices([initialService]);
       if (initialBarber) setSelectedBarber(initialBarber);
@@ -135,12 +139,25 @@ const BookingModal = ({ isOpen, onClose, initialService, initialBarber }) => {
     setStep(targetStep);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name || !phone) {
-      alert("Please enter your name and phone number.");
+    if (!name || !phone || !email) {
+      alert("Please enter your name, phone number, and email address.");
       return;
     }
+
+    setIsSubmitting(true);
+    await submitAppointmentBooking({
+      name,
+      phone,
+      email,
+      note,
+      selectedServices,
+      selectedBarber,
+      selectedDate,
+      selectedTimeSlot
+    });
+    setIsSubmitting(false);
     setIsSuccess(true);
   };
 
@@ -157,7 +174,7 @@ const BookingModal = ({ isOpen, onClose, initialService, initialBarber }) => {
 • Barber: ${selectedBarber}
 • Date: ${formattedDate}
 • Time Slot: ${selectedTimeSlot}
-• Client: ${name}
+• Client: ${name} (${email})
 • Phone: ${phone}
 ${note ? `• Special Requests: ${note}` : ''}`;
 
@@ -167,9 +184,11 @@ ${note ? `• Special Requests: ${note}` : ''}`;
 
   const handleClose = () => {
     setIsSuccess(false);
+    setIsSubmitting(false);
     setStep(1);
     setName('');
     setPhone('');
+    setEmail('');
     setNote('');
     onClose();
   };
@@ -228,13 +247,19 @@ ${note ? `• Special Requests: ${note}` : ''}`;
               <h3>Appointment Reserved!</h3>
               <p className="success-subtitle">
                 Your appointment for <strong>{selectedServices.join(', ')}</strong> on{' '}
-                <strong>{selectedDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} at {selectedTimeSlot}</strong> has been saved.
+                <strong>{selectedDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} at {selectedTimeSlot}</strong> has been confirmed.
               </p>
               
+              <div className="email-status-chip">
+                <FaEnvelope size={14} className="text-red" />
+                <span>Confirmation email sent to <strong>{email}</strong></span>
+              </div>
+
               <div className="summary-box">
                 <div className="summary-row"><span>Client:</span> <strong>{name}</strong></div>
                 <div className="summary-row"><span>Phone:</span> <strong>{phone}</strong></div>
                 <div className="summary-row"><span>Barber:</span> <strong>{selectedBarber}</strong></div>
+                <div className="summary-row"><span>Google Calendar:</span> <strong className="text-green">Synced to Business Calendar</strong></div>
                 {note && <div className="summary-row"><span>Notes:</span> <strong>{note}</strong></div>}
               </div>
 
@@ -328,7 +353,7 @@ ${note ? `• Special Requests: ${note}` : ''}`;
 
                 </div>
 
-                {/* ── SUBPAGE 2: DATE & TIME (2-COLUMN MATCHING SCREENSHOT) ── */}
+                {/* ── SUBPAGE 2: DATE & TIME ── */}
                 <div className="slide-page">
                   <div className="booking-grid-layout">
                     
@@ -468,11 +493,23 @@ ${note ? `• Special Requests: ${note}` : ''}`;
                       </div>
 
                       <div className="input-group">
+                        <label className="input-field-label">Email Address * (For Confirmation Email)</label>
+                        <input
+                          type="email"
+                          className="dialog-input"
+                          placeholder="e.g. john@example.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          required
+                        />
+                      </div>
+
+                      <div className="input-group">
                         <label className="input-field-label">Note / Special Requests (Optional)</label>
                         <textarea
                           className="dialog-textarea"
                           placeholder="Any preferences about your trim, fade height, beard oil..."
-                          rows={3}
+                          rows={2}
                           value={note}
                           onChange={(e) => setNote(e.target.value)}
                         />
@@ -485,11 +522,12 @@ ${note ? `• Special Requests: ${note}` : ''}`;
                         type="button"
                         className="btn-dialog-outline"
                         onClick={() => goToStep(2)}
+                        disabled={isSubmitting}
                       >
                         <FaArrowLeft size={12} style={{ marginRight: '0.4rem' }} /> Back
                       </button>
-                      <button type="submit" className="btn-dialog-primary">
-                        Confirm & Book Appointment
+                      <button type="submit" className="btn-dialog-primary" disabled={isSubmitting}>
+                        {isSubmitting ? "Confirming Booking..." : "Confirm & Book Appointment"}
                       </button>
                     </div>
 
